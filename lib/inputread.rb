@@ -19,7 +19,7 @@ Input = Struct.new(:path) do
 			puts "the input file does not exist"
 			exit 1
 		else 
-			exit 0
+			return 0
 		end
 	end
 	
@@ -82,21 +82,30 @@ Input = Struct.new(:path) do
 	
 	def pizzapieces
 		datos = read_file(path)
-		pizza = Hash.new
+		@pizza = Hash.new
 		maxrow = rows
 		currow = 0
 		maxcol = columns
 		datos.each_line	do |line|
-			if line.strip !=~ / /
+			if !line.strip.match(/\s/)
 				curcol = 0
-				values = line.split('')
-				while curcol < maxcol
-					pizza[[currow,curcol]]=values[curcol]
-					curcol += 1
+				values = line.split("")
+				while curcol < maxcol.to_i
+					if values[curcol] == "T"
+						@pizza[[currow,curcol]] = "T"
+						curcol += 1
+					elsif values[curcol] == "M"
+						@pizza[[currow,curcol]] = "M"
+						curcol += 1
+					else
+						puts "ERROR: the value is not M or T"
+						exit 1
+					end
 				end
+			currow += 1
 			end
 		end
-		return pizza
+	return @pizza
 	end
 end
 
