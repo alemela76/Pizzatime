@@ -1,0 +1,1 @@
+A humble attempt to solve Google HASH code contest exercise
