@@ -34,13 +34,18 @@ def isvalid(solut)
 	sum = 0
 	rest = 0
 	i = 0
+#	puts "this is solution #{solut}"
 	while i < cells
 		sum = sum + @pieces[solut[i]].to_i
+#		puts "piece is #{solut[i]} and has value #{@pieces[solut[i]].to_i}"
+#		puts "partial sum is #{sum}"
 		i +=1
 	end
 	if sum >= @minelements.to_i
 		rest = cells - sum
 		if rest >= @minelements.to_i
+#		  puts "totalsum is #{sum}"
+#			puts "rest is #{rest}"
 			return 0
 		end
 	else
@@ -49,15 +54,16 @@ def isvalid(solut)
 end
 ####
 
-
-#checks
+#checks all the possible pieces fitting the specs
 solution = Array.new
 counter = 0
 r = 0
 i = 0
+k = 0
 while r < @rows.to_i
 	c = 0
 	while c < @columns.to_i
+#		puts "value row#{r} column#{c} = #{@pieces[[r,c]]}"
 		j = 0
 		while j < @shapesnum
 			wh = @shape.shapes.keys[j]
@@ -67,18 +73,19 @@ while r < @rows.to_i
 #				puts "shape #{w} x #{h} starting in #{c},#{r} fits"
 				trozo = Sliceshapes.new(c, r, w, h)
 				solution[i] = trozo.listcells
+#				puts "solution #{i} is #{solution[i]}"
 				if isvalid(solution[i]) == 0
-					puts "solution #{i} is valid"
-					puts "solution #{i} is #{solution[i]}"
+#					puts "solution #{i} is valid"
+#					puts "solution #{i} is #{solution[i]}"
+					goodsolution[k]=solution[i]
+					k +=1
 				end
 #				puts "solution #{i} is #{solution[i]}"
 				i +=1
 			end
 			j +=1
 		end	  			
-#		puts "value row#{r} column#{c} = #{@pieces[[r,c]]}"
 		c += 1
 	end
 	r += 1
 end
-

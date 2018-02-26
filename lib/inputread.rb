@@ -92,10 +92,10 @@ Input = Struct.new(:path) do
 				values = line.split("")
 				while curcol < maxcol.to_i
 					if values[curcol] == "T"
-						@pizza[[currow,curcol]] = 0
+						@pizza[[curcol,currow]] = 0
 						curcol += 1
 					elsif values[curcol] == "M"
-						@pizza[[currow,curcol]] = 1
+						@pizza[[curcol,currow]] = 1
 						curcol += 1
 					else
 						puts "ERROR: the value is not M or T"
