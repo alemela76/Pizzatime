@@ -55,8 +55,8 @@ end
 ####
 
 #checks all the possible pieces fitting the specs
-solution = Array.new
-counter = 0
+trozo = Array.new
+goodslices = Array.new
 r = 0
 i = 0
 k = 0
@@ -71,16 +71,16 @@ while r < @rows.to_i
 			h = wh[1]
 			if fits(c,r,w,h) == 0
 #				puts "shape #{w} x #{h} starting in #{c},#{r} fits"
-				trozo = Sliceshapes.new(c, r, w, h)
-				solution[i] = trozo.listcells
-#				puts "solution #{i} is #{solution[i]}"
-				if isvalid(solution[i]) == 0
-#					puts "solution #{i} is valid"
-#					puts "solution #{i} is #{solution[i]}"
-					goodsolution[k]=solution[i]
+				trozos = Sliceshapes.new(c, r, w, h)
+				trozo[i] = trozos.listcells
+#				puts "slicesolution #{i} is #{trozo[i]}"
+				if isvalid(trozo[i]) == 0
+#					puts "slicesolution #{i} is valid"
+#					puts "slicesolution #{i} is #{trozo[i]}"
+					goodslices[k] = trozos.listcells
 					k +=1
 				end
-#				puts "solution #{i} is #{solution[i]}"
+#				puts "slicesolution #{i} is #{trozo[i]}"
 				i +=1
 			end
 			j +=1
@@ -89,3 +89,75 @@ while r < @rows.to_i
 	end
 	r += 1
 end
+
+possiblesolutions = Array.new
+validslices = goodslices.length
+#puts "valid slices= #{validslices}"
+size = 0
+while size < validslices
+#	puts goodslices[0]
+	size +=1
+	possiblesolutions << goodslices.combination(size).to_a
+#	puts goodslices
+#	puts possiblesolutions
+end
+
+def intersect(solut)
+	cont1 = 0
+	slicesnumber = soluts.length
+	while cont1 < slicesnumber
+		cont2 = cont1 + 1
+		while cont2 < slicesnumber
+			if !(soluts[cont1] & soluts[cont2]).empty?
+				return 1
+				break
+			end
+			cont2 +=1
+		end
+		cont1 +=1
+	end
+	return 0
+end
+
+numsolutions = possiblesolutions.length
+cont = 0
+goodsolutions = Array.new
+
+while cont < numsolutions
+	if intersect(possiblesolutions[cont]) == 0
+		goodsolutions << possiblesolutions[cont]
+	end
+	cont +=1
+end
+
+def selectsolution(goodsol)
+	slices = Array.new
+	numsol = goodsol.length
+	biggerarea = 0
+	numslices = 0
+	minslices = 0
+	count1 = 0
+	while count1 < numsol
+	 	area = 0
+		count2 = 0
+		numslices = goodsol[count1].length
+		while count2 < numslices
+			area = area + goodsol[count2].length
+			count2 +=1
+		end
+		if area > biggerarea
+			minslices == numslices
+			biggerarea = area
+			solution = goodsol[count1]
+		elsif area == biggerarea
+			if minslices > numslices
+				minslices == numslices
+				solution = goodsol[count1]
+			end
+		end
+	count1 +=1
+	end
+	return solution
+end
+
+puts selectsolution(goodsolutions)
